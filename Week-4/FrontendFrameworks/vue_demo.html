@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue 3 Composition API & Reactivity Demonstration</title>
+    <!-- Importing Vue 3 from CDN to make the example fully runnable in browser -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f9f9f9;
+            color: #2c3e50;
+        }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .framework-header { border-bottom: 3px solid #42b883; padding-bottom: 10px; margin-bottom: 20px; }
+        .box { border: 1px solid #e0e0e0; padding: 15px; margin: 15px 0; border-radius: 6px; }
+        .highlight { color: #42b883; font-weight: bold; }
+        button { background: #42b883; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #35495e; }
+        input[type="text"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 60%; }
+        ul { padding-left: 20px; }
+        .child-comp { background-color: #f1f8e9; border: 1px solid #c5e1a5; padding: 15px; border-radius: 5px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <div id="app" class="container">
+        <div class="framework-header">
+            <h1>Vue 3 Composition API Demo</h1>
+            <p>This is a live Vue 3 app utilizing the Composition API and standard template syntax directives.</p>
+        </div>
+
+        <!-- ==============================================================================
+           1. TEMPLATE SYNTAX & DIRECTIVES
+           ============================================================================== -->
+        <div class="box">
+            <h2>Directives & Bindings</h2>
+            
+            <!-- v-model: Two-way data binding syncing input text with reactive state -->
+            <p>
+                <strong>Input Binding (v-model):</strong><br>
+                <input type="text" v-model="newItemName" placeholder="Type new item name...">
+                <button @click="addItem">Add to List</button>
+            </p>
+
+            <!-- v-if/v-else: Conditional rendering of DOM blocks -->
+            <p v-if="items.length === 0">Your shopping list is empty!</p>
+            <div v-else>
+                <p><strong>Item List (v-for):</strong></p>
+                <ul>
+                    <!-- v-for: Renders a list by iterating over an array -->
+                    <li v-for="(item, index) in items" :key="index">
+                        {{ item.name }} - ${{ item.price }} 
+                        <button @click="removeItem(index)" style="background:#e74c3c; padding:2px 8px; font-size:0.8em; margin-left:10px;">X</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==============================================================================
+           2. REACTIVITY (ref, reactive, computed)
+           ============================================================================== -->
+        <div class="box">
+            <h2>Reactivity System</h2>
+            <p>Reactive values update DOM automatically when their values mutate.</p>
+            <ul>
+                <li><code>newItemName</code> (ref string): <span class="highlight">{{ newItemName }}</span></li>
+                <li>Total Items Count (computed): <span class="highlight">{{ totalItems }}</span></li>
+                <li>Estimated Subtotal (computed): <span class="highlight">${{ subtotal }}</span></li>
+            </ul>
+        </div>
+
+        <!-- ==============================================================================
+           3. COMPONENTS & CUSTOM EVENTS
+           ============================================================================== -->
+        <!-- Injecting a child component, binding the prop 'message', and listening to event 'celebrate' -->
+        <child-component 
+            message="Hello from Vue Parent Component!" 
+            @celebrate="onCelebrate">
+        </child-component>
+
+    </div>
+
+    <script>
+        const { createApp, ref, reactive, computed } = Vue;
+
+        // --- Child Component Declaration ---
+        const ChildComponent = {
+            props: {
+                message: { type: String, required: true }
+            },
+            template: `
+                <div class="child-comp">
+                    <h3>Child Component Landmark</h3>
+                    <p><strong>Prop received:</strong> {{ message }}</p>
+                    <button @click="emitCelebrate">Trigger Parent Custom Event</button>
+                </div>
+            `,
+            setup(props, { emit }) {
+                const emitCelebrate = () => {
+                    // emit triggers a custom event 'celebrate' caught by parent template
+                    emit('celebrate', 'Special notification payload from child!');
+                };
+                return { emitCelebrate };
+            }
+        };
+
+        // --- Main App Creation ---
+        createApp({
+            components: {
+                // Registering the child component
+                'child-component': ChildComponent
+            },
+            setup() {
+                // ref: Used for primitive data types (string, number, boolean)
+                const newItemName = ref('');
+                
+                // reactive: Used for complex structures like arrays and objects
+                const items = reactive([
+                    { name: "Vue Guide Book", price: 29 },
+                    { name: "Dev Laptop Sticker", price: 4 }
+                ]);
+
+                // computed: Cached values derived from existing reactive state
+                const totalItems = computed(() => items.length);
+                const subtotal = computed(() => {
+                    return items.reduce((acc, curr) => acc + curr.price, 0);
+                });
+
+                // Methods
+                const addItem = () => {
+                    if (newItemName.value.trim() !== '') {
+                        items.push({
+                            name: newItemName.value,
+                            price: Math.floor(Math.random() * 50) + 5
+                        });
+                        newItemName.value = ''; // Reset input field
+                    }
+                };
+
+                const removeItem = (index) => {
+                    items.splice(index, 1);
+                };
+
+                const onCelebrate = (msg) => {
+                    alert(`[Parent Callback] Caught Custom Event! Message: ${msg}`);
+                };
+
+                // Exposing variables/methods to the template
+                return {
+                    newItemName,
+                    items,
+                    totalItems,
+                    subtotal,
+                    addItem,
+                    removeItem,
+                    onCelebrate
+                };
+            }
+        }).mount('#app');
+    </script>
+
+    <!-- ==============================================================================
+       4. VUE ROUTER EXPLANATION
+       ============================================================================== -->
+    <!--
+    Vue Router manages browser history and maps paths to components.
+    
+    Example Config:
+    --------------------------------------------------------------------------------
+    import { createRouter, createWebHistory } from 'vue-router';
+    import HomeView from './views/HomeView.vue';
+    
+    const router = createRouter({
+        history: createWebHistory(),
+        routes: [
+            { path: '/', component: HomeView },
+            { path: '/about', component: () => import('./views/AboutView.vue') } // Lazy load
+        ]
+    });
+    -->
+
+    <!-- ==============================================================================
+       5. PINIA STATE STORE EXPLANATION
+       ============================================================================== -->
+    <!--
+    Pinia is Vue's modern lightweight state management client (replacing Vuex).
+    
+    Example Store Definition:
+    --------------------------------------------------------------------------------
+    import { defineStore } from 'pinia';
+    
+    export const useCartStore = defineStore('cart', {
+        state: () => ({
+            cartItems: []
+        }),
+        getters: {
+            itemCount: (state) => state.cartItems.length
+        },
+        actions: {
+            addToCart(item) {
+                this.cartItems.push(item);
+            }
+        }
+    });
+    -->
+
+</body>
+</html>

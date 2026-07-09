@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML5 Semantic Elements Demonstration</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        header, nav, main, section, article, aside, footer {
+            padding: 15px;
+            margin: 10px;
+            border-radius: 6px;
+            border: 1px dashed #bbb;
+        }
+        header { background-color: #e3f2fd; border-color: #2196f3; }
+        nav { background-color: #efebe9; border-color: #795548; }
+        main { background-color: #e8f5e9; border-color: #4caf50; }
+        section { background-color: #fffde7; border-color: #fbc02d; }
+        article { background-color: #ffffff; border-color: #e0e0e0; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        aside { background-color: #f3e5f5; border-color: #9c27b0; }
+        footer { background-color: #eceff1; border-color: #607d8b; text-align: center; }
+        
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 10px;
+        }
+        @media (max-width: 768px) {
+            .layout-grid { grid-template-columns: 1fr; }
+        }
+        .tag-info {
+            display: inline-block;
+            background: #333;
+            color: #fff;
+            font-family: monospace;
+            padding: 2px 6px;
+            font-size: 0.85em;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER: Represents introductory content, branding, or titles -->
+    <header>
+        <span class="tag-info">&lt;header&gt;</span>
+        <h1>HTML5 Semantic Elements Layout Demo</h1>
+        <p>This page demonstrates semantic markup. Open the source code to see how semantic tags replace nested divs.</p>
+    </header>
+
+    <!-- NAV: Contains navigation links for the website or document -->
+    <nav>
+        <span class="tag-info">&lt;nav&gt;</span>
+        <strong>Navigation Links:</strong>
+        <a href="#html5">Semantic HTML</a> | 
+        <a href="#css3">CSS Layouts</a> | 
+        <a href="#js">Modern JavaScript</a>
+    </nav>
+
+    <!-- Layout Wrapper using standard grid for desktop side-by-side -->
+    <div class="layout-grid">
+        
+        <!-- MAIN: Represents the dominant content area of the document -->
+        <main>
+            <span class="tag-info">&lt;main&gt;</span>
+            <h2>Primary Main Content Area</h2>
+            <p>The main tag wraps the core content of the webpage. There must be only one main element per page.</p>
+
+            <!-- SECTION: Represents a generic standalone section of a document -->
+            <section id="html5">
+                <span class="tag-info">&lt;section&gt;</span>
+                <h3>Section: Why Semantics Matter?</h3>
+                <p>Sections group related content. They are usually introduced with a heading (h1-h6).</p>
+                
+                <!-- ARTICLE: Represents a self-contained, independent composition -->
+                <article>
+                    <span class="tag-info">&lt;article&gt;</span>
+                    <h4>Article: Search Engine Optimization (SEO) benefits</h4>
+                    <p>Articles are independent content pieces that could be syndicated or reused (e.g. blog posts, newspaper articles, forum posts).</p>
+                </article>
+                
+                <article>
+                    <span class="tag-info">&lt;article&gt;</span>
+                    <h4>Article: Accessibility & Screen Readers</h4>
+                    <p>Screen readers use semantic tags like landmarks to navigate pages easily, bypassing visual layout structures.</p>
+                </article>
+            </section>
+        </main>
+
+        <!-- ASIDE: Contains content tangentially related to the main content (e.g., sidebars) -->
+        <aside>
+            <span class="tag-info">&lt;aside&gt;</span>
+            <h3>Aside Sidebar</h3>
+            <p>Asides contain secondary information like advertisements, related links, author bios, or quick definitions.</p>
+        </aside>
+
+    </div>
+
+    <!-- FOOTER: Represents a footer for its nearest ancestor or section -->
+    <footer>
+        <span class="tag-info">&lt;footer&gt;</span>
+        <p>&copy; 2026 Python Full Stack Engineer Learning Path. All Rights Reserved. Designed for Educational purposes.</p>
+    </footer>
+
+</body>
+</html>

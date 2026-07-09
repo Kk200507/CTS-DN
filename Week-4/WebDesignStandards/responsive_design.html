@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Responsive Design Demonstrations</title>
+    <style>
+        /* ==============================================================================
+           1. FLUID LAYOUTS & MOBILE-FIRST DESIGN (Base Styles for Mobile)
+           ============================================================================== */
+        /*
+        Mobile-First Strategy:
+          - Write styles for small screens first, then use min-width media queries to scale UP.
+          - Mobile styling is simpler, reducing CPU recalculation overhead on low-power devices.
+        */
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background-color: #f1f2f6;
+            color: #2f3542;
+        }
+
+        /* Fluid wrapper using % and max-width for responsiveness */
+        .wrapper {
+            width: 100%;
+            max-width: 1200px; /* Limits maximum size on large desktop screens */
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #2f3542;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        /* ==============================================================================
+           2. VIEWPORT UNITS (vw, vh, vmin, vmax)
+           ============================================================================== */
+        /*
+        Viewport units are relative to browser dimensions:
+          - 1vw = 1% of viewport width
+          - 1vh = 1% of viewport height
+        */
+        .hero {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            /* Height: 30% of browser window height */
+            height: 30vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+            margin: 15px 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .hero h2 {
+            /* Font size scales fluidly with browser window width */
+            font-size: 5vw; 
+            margin: 0;
+        }
+
+        /* ==============================================================================
+           3. RESPONSIVE FLEXBOX & GRID LAYOUTS
+           ============================================================================== */
+        /* Base Flex: Column layout for mobile screens */
+        .card-row {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #dfe4ea;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        /* ==============================================================================
+           4. MEDIA QUERIES (Breakpoints)
+           ============================================================================== */
+        /* Tablet screens (min-width: 600px) */
+        @media (min-width: 600px) {
+            body { padding: 20px; }
+            .card-row {
+                flex-direction: row; /* Switch to row layout */
+                flex-wrap: wrap;
+            }
+            .card {
+                flex: 1 1 calc(50% - 10px); /* 2 columns on tablet */
+            }
+            .hero h2 { font-size: 3rem; } /* Override viewport fluid font size */
+        }
+
+        /* Desktop screens (min-width: 900px) */
+        @media (min-width: 900px) {
+            .card-row {
+                display: grid;
+                /* Grid: 3 equal columns using fractional unit (fr) */
+                grid-template-columns: repeat(3, 1fr); 
+            }
+        }
+
+        /* ==============================================================================
+           5. CONTAINER QUERIES (@container)
+           ============================================================================== */
+        /*
+        Unlike Media Queries (which check the global browser window width), 
+        Container Queries check the width of the parent container element itself.
+        This allows components to adapt layout depending on where they are placed.
+        */
+        
+        /* Step A: Initialize the container context on the parent */
+        .container-parent {
+            container-type: inline-size;
+            container-name: sidebar-card-container;
+            background: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            border: 2px dashed #a4b0be;
+            margin-top: 20px;
+        }
+
+        /* Step B: Base layout for the target component */
+        .adaptive-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #ffa502;
+            color: white;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        /* Step C: Declare Container Query checking the parent size */
+        @container sidebar-card-container (min-width: 500px) {
+            .adaptive-card {
+                /* If parent is wide enough, switch to row layout */
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                background: #ff7f50;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <header>
+            <h1>Responsive Design Playground</h1>
+            <p>Resize the browser window to see layouts scale, cards wrap, grid adapt, and container styles change.</p>
+        </header>
+
+        <!-- Viewport Height/Width Demo -->
+        <div class="hero">
+            <h2>Viewport Units Hero</h2>
+            <p>Height is set to 30vh. Title font is set to 5vw.</p>
+        </div>
+
+        <!-- Flexbox & Grid Cards Demo -->
+        <h2>Adaptive Card Grid</h2>
+        <div class="card-row">
+            <div class="card">
+                <h3>Card 1</h3>
+                <p>On mobile, stack vertically. On tablet, wraps into 2 columns. On desktop, renders as 3 grid columns.</p>
+            </div>
+            <div class="card">
+                <h3>Card 2</h3>
+                <p>Leverages CSS Grid and Media Queries for multi-breakpoint layouts.</p>
+            </div>
+            <div class="card">
+                <h3>Card 3</h3>
+                <p>Combines Flexbox margins and Grid tracks for modern, robust layouts.</p>
+            </div>
+        </div>
+
+        <!-- Container Queries Demo -->
+        <h2>Container Queries Demo</h2>
+        <p>The orange box below queries the dashed-border container width, NOT the browser screen width. (If parent width > 500px, it turns coral and lays out horizontally).</p>
+        
+        <div class="container-parent">
+            <div class="adaptive-card">
+                <div>
+                    <h3>Adaptive Component</h3>
+                    <p>I monitor my parent element size.</p>
+                </div>
+                <button style="background:white; color:#2f3542; border:none; padding:10px; border-radius:4px; font-weight:bold;">Call Action</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
