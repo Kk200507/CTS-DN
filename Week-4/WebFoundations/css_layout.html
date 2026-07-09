@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS3 Layout Foundations: Flexbox vs Grid</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #fafafa;
+            color: #333;
+        }
+        h1 { text-align: center; color: #2c3e50; }
+        .intro { max-width: 800px; margin: 0 auto 30px auto; text-align: center; }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid #eaeaea;
+        }
+        
+        .demo-section h2 {
+            margin-top: 0;
+            color: #2980b9;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+
+        /* ==============================================================================
+           CSS FLEXBOX DEMO STYLES (One-Dimensional Layout)
+           ============================================================================== */
+        .flex-container {
+            display: flex;             /* Establishes flex layout */
+            flex-direction: row;       /* Layout direction: row, row-reverse, column, column-reverse */
+            justify-content: space-around; /* Horizontal alignment: flex-start, flex-end, center, space-between, space-around, space-evenly */
+            align-items: center;       /* Vertical alignment: flex-start, flex-end, center, baseline, stretch */
+            flex-wrap: wrap;           /* Wrapping behavior: nowrap, wrap, wrap-reverse */
+            background-color: #f5f6fa;
+            padding: 15px;
+            border-radius: 6px;
+            min-height: 150px;
+        }
+        
+        .flex-item {
+            background-color: #3498db;
+            color: white;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            flex-grow: 1;              /* Allows items to grow to fill space (default 0) */
+            flex-shrink: 1;            /* Allows items to shrink if space is tight (default 1) */
+            flex-basis: 150px;         /* Default width of the item before remaining space is distributed */
+        }
+        .flex-item.special {
+            background-color: #e74c3c;
+            flex-grow: 2;              /* Grow twice as fast as neighbors */
+        }
+
+        /* ==============================================================================
+           CSS GRID DEMO STYLES (Two-Dimensional Layout)
+           ============================================================================== */
+        .grid-container {
+            display: grid;             /* Establishes grid layout */
+            /* Defines columns: 3 equal-width columns using fractional units (fr) */
+            grid-template-columns: repeat(3, 1fr); 
+            /* Defines rows height */
+            grid-template-rows: auto;
+            /* Sets spacing between columns and rows */
+            gap: 15px;
+            background-color: #f5f6fa;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .grid-item {
+            background-color: #2ecc71;
+            color: white;
+            padding: 30px 20px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        /* Grid spans demonstrate 2D capabilities: items can span across multiple rows/columns */
+        .grid-item.header-span {
+            background-color: #f39c12;
+            grid-column: span 3;       /* Spans across all 3 columns */
+        }
+        
+        .grid-item.row-span {
+            background-color: #9b59b6;
+            grid-row: span 2;          /* Spans across 2 rows */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CSS3 Layouts: Flexbox vs. Grid</h1>
+    <div class="intro">
+        <p>Modern layouts use Flexbox (best for 1-dimensional item alignment in a single row or column) and Grid (best for 2-dimensional grid layouts, dealing with rows and columns simultaneously).</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- SECTION 1: FLEXBOX DEMO -->
+        <section class="demo-section">
+            <h2>1. CSS Flexbox (1D Layout)</h2>
+            <p>Flexbox works on a single axis (either row or column). Below, items wrap and share space dynamically using <code>flex-grow</code>.</p>
+            
+            <div class="flex-container">
+                <div class="flex-item">Flex Item 1 (basis 150px)</div>
+                <div class="flex-item special">Flex Item 2 (grow: 2)</div>
+                <div class="flex-item">Flex Item 3 (basis 150px)</div>
+                <div class="flex-item">Flex Item 4 (basis 150px)</div>
+            </div>
+            
+            <p><strong>Common Flex Attributes:</strong></p>
+            <ul>
+                <li><code>display: flex;</code>: Initializes flex context on parent.</li>
+                <li><code>justify-content:</code>: Align items along the main axis.</li>
+                <li><code>align-items:</code>: Align items along the cross axis.</li>
+                <li><code>flex-grow:</code>: Ratios on how children expand to consume empty space.</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 2: GRID DEMO -->
+        <section class="demo-section">
+            <h2>2. CSS Grid (2D Layout)</h2>
+            <p>CSS Grid handles both horizontal columns and vertical rows. Elements can be assigned explicit grid coordinates.</p>
+            
+            <div class="grid-container">
+                <div class="grid-item header-span">Grid Item 1 (Spans 3 Columns)</div>
+                <div class="grid-item row-span">Grid Item 2 (Spans 2 Rows)</div>
+                <div class="grid-item">Grid Item 3</div>
+                <div class="grid-item">Grid Item 4</div>
+                <div class="grid-item">Grid Item 5</div>
+                <div class="grid-item">Grid Item 6</div>
+            </div>
+            
+            <p><strong>Common Grid Attributes:</strong></p>
+            <ul>
+                <li><code>display: grid;</code>: Initializes grid context.</li>
+                <li><code>grid-template-columns:</code>: Defines column widths (e.g., <code>repeat(3, 1fr)</code>, <code>200px 1fr 2fr</code>).</li>
+                <li><code>grid-column / grid-row:</code>: Defines starting/ending track coordinates for child elements (e.g., <code>span 3</code>, <code>1 / 3</code>).</li>
+                <li><code>gap:</code>: Setting spacing between columns/rows directly.</li>
+            </ul>
+        </section>
+        
+    </div>
+
+</body>
+</html>
